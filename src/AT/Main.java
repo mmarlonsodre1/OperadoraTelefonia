@@ -68,7 +68,7 @@ public class Main {
                        break;
                    case 4: //SubMenu
                        submenu = Integer.parseInt(JOptionPane.showInputDialog("[1] Lista de clientes \n[2] Clientes com número de créditos igual ou menor a zero "
-                       + "\n[3] Clientes que tem crédito acima de um determinado valor \n[4]  Listar a conta com o maior número de crédito "
+                       + "\n[3] Clientes que tem crédito acima de um determinado valor \n[4] Listar a conta com o maior número de crédito "
                                + "\n[5] Relatório de ligações \n[6] Voltar para menu anterior"));
                        switch(submenu){
                             case 1: //listar tudo
@@ -86,9 +86,11 @@ public class Main {
                                 mostrarSubmenu = "";
                                 for (int i = 0; i < arq.array.size(); i++) {
                                     stringArray = String.valueOf(arq.array.get(i)).split(";/");
-                                    if (Integer.parseInt(stringArray[3]) < 1){ //Se o crédito for menor que 1
-                                        mostrarSubmenu += String.format("Nome: %s \nNúmero: %s \nPlano: %s \nCrédito :%s \n \n",
-                                                stringArray[1], stringArray[0], stringArray[2], stringArray[3]);
+                                    if(stringArray[2].equals("1")){
+                                        if (Integer.parseInt(stringArray[3]) < 1){ //Se o crédito for menor que 1
+                                            mostrarSubmenu += String.format("Nome: %s \nNúmero: %s \nPlano: %s \nCrédito :%s \n \n",
+                                                    stringArray[1], stringArray[0], stringArray[2], stringArray[3]);
+                                        }
                                     }
                                 }
                                 if(mostrarSubmenu.equals("")){
@@ -102,9 +104,11 @@ public class Main {
                                 mostrarSubmenu = "";
                                 for (int i = 0; i < arq.array.size(); i++) {
                                     stringArray = String.valueOf(arq.array.get(i)).split(";/");
-                                    if (Integer.parseInt(stringArray[3]) > valor){  // Se o credito for maior que o valor estipulado
-                                        mostrarSubmenu += String.format("Nome: %s \nNúmero: %s \nPlano: %s \nCrédito : %s \n \n",
-                                                stringArray[1], stringArray[0], stringArray[2], stringArray[3]);
+                                    if(stringArray[2].equals("1")){
+                                        if (Integer.parseInt(stringArray[3]) > valor){  // Se o credito for maior que o valor estipulado
+                                            mostrarSubmenu += String.format("Nome: %s \nNúmero: %s \nPlano: %s \nCrédito : %s \n \n",
+                                                    stringArray[1], stringArray[0], stringArray[2], stringArray[3]);
+                                        }
                                     }
                                 }
                                 if(mostrarSubmenu.equals("")){
@@ -117,11 +121,13 @@ public class Main {
                                 arq.ler("Dados.txt");
                                 mostrarSubmenu = "";
                                 for (int i = 0; i < arq.array.size(); i++) {
-                                    if (Integer.parseInt(String.valueOf(arq.array.get(i)).split(";/")[3]) > valor){ //Achar o maior valor de crédito
-                                        valor = Integer.parseInt(String.valueOf(arq.array.get(i)).split(";/")[3]);
-                                        stringArray = String.valueOf(arq.array.get(i)).split(";/");
-                                        mostrarSubmenu = String.format("Nome: %s \nNúmero: %s \nPlano: %s \nCrédito : %s \n \n",
-                                                stringArray[1], stringArray[0], stringArray[2], stringArray[3]);
+                                    if(stringArray[2].equals("1")){
+                                        if (Integer.parseInt(String.valueOf(arq.array.get(i)).split(";/")[3]) > valor){ //Achar o maior valor de crédito
+                                            valor = Integer.parseInt(String.valueOf(arq.array.get(i)).split(";/")[3]);
+                                            stringArray = String.valueOf(arq.array.get(i)).split(";/");
+                                            mostrarSubmenu = String.format("Nome: %s \nNúmero: %s \nPlano: %s \nCrédito : %s \n \n",
+                                                    stringArray[1], stringArray[0], stringArray[2], stringArray[3]);
+                                        }
                                     }
                                 }
                                 valor = 0;
