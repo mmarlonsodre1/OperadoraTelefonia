@@ -1,5 +1,6 @@
 package AT;
 
+import static AT.Main.showInex;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -34,146 +35,16 @@ public class Main {
                
                switch(menu){
                    case 1: //Inclusão
-                       arq.ler("Dados.txt");
-                       numero = numeroTelefone();
-                       if(numero != "erro"){
-                        if (arq.verificarNumero(numero)== false){
-                            stringArray = inclusao();
-                            arq.gravar("Dados.txt", juntar(numero, stringArray[1],
-                               stringArray[2], stringArray[3]));
-                        } else{
-                           showInex("Número Inexistente");
-                        }
-                       }
+                       inclusaoMetodo(arq);
                        break;
                    case 2: //Alteracao
-                       arq.ler("Dados.txt");
-                        if (arq.verificarNumero(numeroTelefone())){
-                            stringArray = alteracao(arq.verificaocao);
-                            arq.verificaocao[1] = stringArray[1];
-                            arq.verificaocao[2] = stringArray[2];
-                            arq.verificaocao[3] = stringArray[3];
-                            arq.alterar("Dados.txt");
-                        } else{
-                           showInex("Número Inexistente");
-                        }
+                       editarMetodo(arq);
                        break;
                    case 3: //Exclusao
-                       arq.ler("Dados.txt");
-                       if (arq.verificarNumero(numeroTelefone())){
-                            arq.remover("Dados.txt");
-                        } else{
-                           showInex("Número Inexistente");
-                        }
+                       deletMetodo(arq);
                        break;
                    case 4: //SubMenu
-                       submenu = Integer.parseInt(JOptionPane.showInputDialog("[1] Lista de clientes \n[2] Clientes com número de créditos igual ou menor a zero "
-                       + "\n[3] Clientes que tem crédito acima de um determinado valor \n[4] Listar a conta com o maior número de crédito "
-                               + "\n[5] Relatório de ligações \n[6] Voltar para menu anterior"));
-                       switch(submenu){
-                            case 1: //listar tudo
-                                arq.ler("Dados.txt");
-                                mostrarSubmenu = "";
-                                for (int i = 0; i < arq.array.size(); i++) { // mostrar tudo
-                                    stringArray = String.valueOf(arq.array.get(i)).split(";/");
-                                    mostrarSubmenu += String.format("Nome: %s \nNúmero: %s \nPlano: %s \nCrédito : %s \n \n",
-                                            stringArray[1], stringArray[0], stringArray[2], stringArray[3]);
-                                }
-                                showInex(mostrarSubmenu);
-                                break;
-                            case 2: //listar < 0
-                                arq.ler("Dados.txt");
-                                mostrarSubmenu = "";
-                                for (int i = 0; i < arq.array.size(); i++) {
-                                    stringArray = String.valueOf(arq.array.get(i)).split(";/");
-                                    if(stringArray[2].equals("1")){
-                                        if (Integer.parseInt(stringArray[3]) < 1){ //Se o crédito for menor que 1
-                                            mostrarSubmenu += String.format("Nome: %s \nNúmero: %s \nPlano: %s \nCrédito :%s \n \n",
-                                                    stringArray[1], stringArray[0], stringArray[2], stringArray[3]);
-                                        }
-                                    }
-                                }
-                                if(mostrarSubmenu.equals("")){
-                                    mostrarSubmenu = "Sem clientes";
-                                }
-                                showInex(mostrarSubmenu);
-                                break;
-                            case 3: //listar > que valor
-                                valor = Integer.parseInt(JOptionPane.showInputDialog("Digite o valor"));
-                                arq.ler("Dados.txt");
-                                mostrarSubmenu = "";
-                                for (int i = 0; i < arq.array.size(); i++) {
-                                    stringArray = String.valueOf(arq.array.get(i)).split(";/");
-                                    if(stringArray[2].equals("1")){
-                                        if (Integer.parseInt(stringArray[3]) > valor){  // Se o credito for maior que o valor estipulado
-                                            mostrarSubmenu += String.format("Nome: %s \nNúmero: %s \nPlano: %s \nCrédito : %s \n \n",
-                                                    stringArray[1], stringArray[0], stringArray[2], stringArray[3]);
-                                        }
-                                    }
-                                }
-                                if(mostrarSubmenu.equals("")){
-                                    mostrarSubmenu = "Sem clientes";
-                                }
-                                valor = 0;
-                                showInex(mostrarSubmenu);
-                                break;
-                            case 4: // listar maior
-                                arq.ler("Dados.txt");
-                                mostrarSubmenu = "";
-                                for (int i = 0; i < arq.array.size(); i++) {
-                                    if(stringArray[2].equals("1")){
-                                        if (Integer.parseInt(String.valueOf(arq.array.get(i)).split(";/")[3]) > valor){ //Achar o maior valor de crédito
-                                            valor = Integer.parseInt(String.valueOf(arq.array.get(i)).split(";/")[3]);
-                                            stringArray = String.valueOf(arq.array.get(i)).split(";/");
-                                            mostrarSubmenu = String.format("Nome: %s \nNúmero: %s \nPlano: %s \nCrédito : %s \n \n",
-                                                    stringArray[1], stringArray[0], stringArray[2], stringArray[3]);
-                                        }
-                                    }
-                                }
-                                valor = 0;
-                                if(mostrarSubmenu.equals("")){
-                                    mostrarSubmenu = "Sem clientes";
-                                }
-                                showInex(mostrarSubmenu);
-                                break;
-                            case 5: //Boleto
-                                arq.ler("Relatorio.txt");
-                                mostrarSubmenu = "";
-                                numero = numeroTelefone();
-                                if (arq.verificarNumero(numero)){
-                                    for (int i = 0; i < arq.array.size(); i++) {
-                                        if(String.valueOf(arq.array.get(i)).split(";/")[0].equals(numero)){
-                                            valor += Double.parseDouble(String.valueOf(arq.array.get(i)).split(";/")[4].replace(":", "")) - Double.parseDouble(String.valueOf(arq.array.get(i)).split(";/")[3].replace(":", ""));
-                                            stringArray[0] = String.valueOf(arq.array.get(i)).split(";/")[1];
-                                            stringArray[1] = String.valueOf(arq.array.get(i)).split(";/")[0];
-                                            stringArray[3] = String.valueOf(arq.array.get(i)).split(";/")[2];
-                                        }
-                                    }
-                                    stringArray[2] = String.valueOf(valor);
-                                    
-                                    if(stringArray[3].equals("1")){
-                                        arq.ler("Dados.txt");
-                                        arq.verificarNumero(numero);
-                                        arq.verificaocao[3] = String.valueOf(Integer.parseInt(arq.verificaocao[3]) - Integer.parseInt(stringArray[2]));
-                                        arq.alterar("Dados.txt");
-                                        mostrarSubmenu = String.format("Nome: %s \nNúmero: %s \nValor debitado do crédito: R$%s \nSaldo de crédito: R$%s \n \n", 
-                                            stringArray[0], stringArray[1], stringArray[2], arq.verificaocao[3]);   
-                                    } else {
-                                        mostrarSubmenu = String.format("Nome: %s \nNúmero: %s \nValor do Boleto: R$%s \n \n", 
-                                            stringArray[0], stringArray[1], stringArray[2]);   
-                                    }
-                                    valor = 0;
-                                } else{
-                                    showInex("Não Existem gastos para esse número");
-                                }
-                                showInex(mostrarSubmenu);
-                                break;
-                            case 6:
-                                 break;
-                            default:
-                                showInex("Opção Incorreta");
-                                break;
-                       }
+                       relatorioMetodo(arq);
                        break;
                    case 5:
                        break;
@@ -182,7 +53,7 @@ public class Main {
                        
                }
            }catch(Exception e){
-               JOptionPane.showMessageDialog(null, e); //"Digite apenas números"
+               showInex(e); //"Digite apenas números"
            }
            
        }while(menu != 5);
@@ -291,4 +162,224 @@ public class Main {
         }
         return saida;
     }
-}
+    
+    public static void inclusaoMetodo(Arquivo arq){
+        String numero = "";
+        String[] stringArray = new String[4];
+        try {
+            arq.ler("Dados.txt");
+        numero = numeroTelefone();
+        if(numero != "erro"){
+         if (arq.verificarNumero(numero)== false){
+             stringArray = inclusao();
+             arq.gravar("Dados.txt", juntar(numero, stringArray[1],
+                stringArray[2], stringArray[3]));
+         } else{
+            showInex("Número Inexistente");
+         }
+        }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        
+    }
+    
+    public static void editarMetodo(Arquivo arq){
+        String[] stringArray = new String[4];
+        try {
+            arq.ler("Dados.txt");
+            if (arq.verificarNumero(numeroTelefone())){
+                stringArray = alteracao(arq.verificaocao);
+                arq.verificaocao[1] = stringArray[1];
+                arq.verificaocao[2] = stringArray[2];
+                arq.verificaocao[3] = stringArray[3];
+                arq.alterar("Dados.txt");
+            } else{
+               showInex("Número Inexistente");
+            }  
+        } catch (Exception e) {
+        }
+    }
+        
+    public static void deletMetodo(Arquivo arq){
+        try {
+            arq.ler("Dados.txt");
+            if (arq.verificarNumero(numeroTelefone())){
+                 arq.remover("Dados.txt");
+             } else{
+                showInex("Número Inexistente");
+             }
+        } catch (Exception e) {
+        }
+    }
+
+  
+
+    public static void relatorioMetodo(Arquivo arq){
+        int submenu = 0;
+        try{
+            submenu = Integer.parseInt(JOptionPane.showInputDialog("[1] Lista de clientes \n[2] Clientes com número de créditos igual ou menor a zero "
+                       + "\n[3] Clientes que tem crédito acima de um determinado valor \n[4] Listar a conta com o maior número de crédito "
+                               + "\n[5] Relatório de ligações \n[6] Voltar para menu anterior"));
+                       switch(submenu){
+                            case 1: //listar tudo
+                                PrimeiroMetodo(arq);
+                                break;
+                            case 2: //listar < 0
+                                SegundoMetodo(arq);
+                                break;
+                            case 3: //listar > que valor
+                                TerceiroMetodo(arq);
+                                break;
+                            case 4: // listar maior
+                                QuartoMetodo(arq);
+                                break;
+                            case 5: //Boleto
+                                QuintoMetodo(arq);
+                                break;
+                            case 6:
+                                 break;
+                            default:
+                                showInex("Opção Incorreta");
+                                break;
+                       }
+        } catch (Exception e){
+        }
+        
+    }
+    public static void PrimeiroMetodo(Arquivo arq){
+        String[] stringArray = new String[4];
+        String mostrarSubmenu = "";
+
+        try {
+          arq.ler("Dados.txt");
+            mostrarSubmenu = "";
+            for (int i = 0; i < arq.array.size(); i++) { // mostrar tudo
+                stringArray = String.valueOf(arq.array.get(i)).split(";/");
+                mostrarSubmenu += String.format("Nome: %s \nNúmero: %s \nPlano: %s \nCrédito : %s \n \n",
+                        stringArray[1], stringArray[0], stringArray[2], stringArray[3]);
+            }
+            showInex(mostrarSubmenu);  
+        } catch (Exception e) {
+        }
+    }
+    
+    public static void SegundoMetodo(Arquivo arq){
+        String[] stringArray = new String[4];
+        String mostrarSubmenu = "";
+        
+        try {
+            arq.ler("Dados.txt");
+            mostrarSubmenu = "";
+            for (int i = 0; i < arq.array.size(); i++) {
+                stringArray = String.valueOf(arq.array.get(i)).split(";/");
+                if(stringArray[2].equals("1")){
+                    if (Integer.parseInt(stringArray[3]) < 1){ //Se o crédito for menor que 1
+                        mostrarSubmenu += String.format("Nome: %s \nNúmero: %s \nPlano: %s \nCrédito :%s \n \n",
+                                stringArray[1], stringArray[0], stringArray[2], stringArray[3]);
+                    }
+                }
+            }
+            if(mostrarSubmenu.equals("")){
+                mostrarSubmenu = "Sem clientes";
+            }
+            showInex(mostrarSubmenu); 
+        } catch (Exception e) {
+        }
+    }
+    
+    public static void TerceiroMetodo(Arquivo arq){
+        int valor = 0;
+        String[] stringArray = new String[10];
+        String mostrarSubmenu = "";
+        try {
+            valor = Integer.parseInt(JOptionPane.showInputDialog("Digite o valor"));
+            arq.ler("Dados.txt");
+            mostrarSubmenu = "";
+            for (int i = 0; i < arq.array.size(); i++) {
+                stringArray = String.valueOf(arq.array.get(i)).split(";/");
+                if(stringArray[2].equals("1")){
+                    if (Integer.parseInt(stringArray[3]) > valor){  // Se o credito for maior que o valor estipulado
+                        mostrarSubmenu += String.format("Nome: %s \nNúmero: %s \nPlano: %s \nCrédito : %s \n \n",
+                                stringArray[1], stringArray[0], stringArray[2], stringArray[3]);
+                    }
+                }
+            }
+            if(mostrarSubmenu.equals("")){
+                mostrarSubmenu = "Sem clientes";
+            }
+            valor = 0;
+            showInex(mostrarSubmenu);
+        } catch (Exception e) {
+        }
+    }
+    
+    public static void QuartoMetodo(Arquivo arq){
+        int valor = 0;
+        String[] stringArray = new String[10];
+        String mostrarSubmenu = "";
+        
+        try {
+            arq.ler("Dados.txt");
+            mostrarSubmenu = "";
+            for (int i = 0; i < arq.array.size(); i++) {
+                if(stringArray[2].equals("1")){
+                    if (Integer.parseInt(String.valueOf(arq.array.get(i)).split(";/")[3]) > valor){ //Achar o maior valor de crédito
+                        valor = Integer.parseInt(String.valueOf(arq.array.get(i)).split(";/")[3]);
+                        stringArray = String.valueOf(arq.array.get(i)).split(";/");
+                        mostrarSubmenu = String.format("Nome: %s \nNúmero: %s \nPlano: %s \nCrédito : %s \n \n",
+                                stringArray[1], stringArray[0], stringArray[2], stringArray[3]);
+                    }
+                }
+            }
+            valor = 0;
+            if(mostrarSubmenu.equals("")){
+                mostrarSubmenu = "Sem clientes";
+            }
+            showInex(mostrarSubmenu);
+        } catch (Exception e) {
+        }
+    }
+    
+    public static void QuintoMetodo(Arquivo arq){
+        int valor = 0;
+        String[] stringArray = new String[10];
+        String numero, mostrarSubmenu = "";
+
+        try {
+            arq.ler("Relatorio.txt");
+            mostrarSubmenu = "";
+            numero = numeroTelefone();
+            if (arq.verificarNumero(numero)){
+                for (int i = 0; i < arq.array.size(); i++) {
+                    if(String.valueOf(arq.array.get(i)).split(";/")[0].equals(numero)){
+                        valor += Double.parseDouble(String.valueOf(arq.array.get(i)).split(";/")[4].replace(":", "")) - Double.parseDouble(String.valueOf(arq.array.get(i)).split(";/")[3].replace(":", ""));
+                        stringArray[0] = String.valueOf(arq.array.get(i)).split(";/")[1];
+                        stringArray[1] = String.valueOf(arq.array.get(i)).split(";/")[0];
+                        stringArray[3] = String.valueOf(arq.array.get(i)).split(";/")[2];
+                    }
+                }
+                stringArray[2] = String.valueOf(valor);
+
+                if(stringArray[3].equals("1")){
+                    arq.ler("Dados.txt");
+                    arq.verificarNumero(numero);
+                    arq.verificaocao[3] = String.valueOf(Integer.parseInt(arq.verificaocao[3]) - Integer.parseInt(stringArray[2]));
+                    arq.alterar("Dados.txt");
+                    mostrarSubmenu = String.format("Nome: %s \nNúmero: %s \nValor debitado do crédito: R$%s \nSaldo de crédito: R$%s \n \n", 
+                        stringArray[0], stringArray[1], stringArray[2], arq.verificaocao[3]);   
+                } else {
+                    mostrarSubmenu = String.format("Nome: %s \nNúmero: %s \nValor do Boleto: R$%s \n \n", 
+                        stringArray[0], stringArray[1], stringArray[2]);   
+                }
+                valor = 0;
+            } else{
+                showInex("Não Existem gastos para esse número");
+            }
+            showInex(mostrarSubmenu);
+        } catch (Exception e) {
+        }
+    }    
+    
+ }
+
