@@ -1,6 +1,5 @@
 package AT;
 
-import static AT.Main.showInex;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -9,9 +8,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import javax.swing.JOptionPane;
 
 public class Arquivo {
     String file;
@@ -65,6 +61,4 @@ public class Arquivo {
     public void setFile(String file) {
         this.file = file;
     }
-    
-    
 }

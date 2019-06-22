@@ -1,7 +1,6 @@
 package AT;
 
 import static AT.Main.showInex;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalTime;
@@ -11,10 +10,9 @@ import javax.swing.JOptionPane;
 
 public class Main {
     public static void main(String[]args) throws IOException {
-        int menu = 0, indice;
+        int menu = 0;
         ArrayList<Cliente> arrayCliente = new ArrayList();
         ArrayList<Ligacao> arrayLigacao = new ArrayList();
-        ArrayList arrayRelatorio = new ArrayList();
         
         Arquivo arqCliente = new Arquivo("Dados.txt");
         Arquivo arqLigacao = new Arquivo("Relatorio.txt");
@@ -144,8 +142,8 @@ public class Main {
     }
     
     public static String nomeCliente(String entrada){
-        boolean x = true;
         String saida = "";
+        
         do{
             saida = JOptionPane.showInputDialog(entrada);
         } while(saida.equals(""));
@@ -197,7 +195,7 @@ public class Main {
                if (verificarNumeroDados(array, numero) == -1){
                     cliente.numero = numero;
                     cliente.nome = nomeCliente("Digite o Nome do cliente");
-                    cliente.plano = verificarPlano("[1] Pré-Pago \n[2]Pós-Pago");
+                    cliente.plano = verificarPlano("[1] Pré-Pago \n[2] Pós-Pago");
                     cliente.credito = verificarCredito(cliente.plano, "Digite o valor de crédito (Somente valor inteiro)");
                     array.add(cliente);
                     return "Cliente adicionado";
@@ -222,7 +220,7 @@ public class Main {
             if (pos != -1){
                 //Input do JOptionPane
                 stringArray[0] = "Digite o Nome do cliente \nAntigo: " + array.get(pos).getNome();
-                stringArray[1] = "[1] Pré-Pago \n[2]Pós-Pago \nAntigo: " + String.valueOf(array.get(pos).getPlano());
+                stringArray[1] = "[1] Pré-Pago \n[2] Pós-Pago \nAntigo: " + String.valueOf(array.get(pos).getPlano());
                 stringArray[2] = "Digite o valor de crédito (Somente valor inteiro) \nAntigo: " + String.valueOf(array.get(pos).getCredito());
                 System.out.println(array.get(pos).getPlano());
                 array.set(pos, new Cliente(numero, nomeCliente(stringArray[0]), 
@@ -249,12 +247,11 @@ public class Main {
     public static String listarTudo(ArrayList<Cliente> array){
         String mostrarSubmenu = "Sem Clientes";
 
-            mostrarSubmenu = "";
-            for (int i = 0; i < array.size(); i++) { // mostrar tudo
-                mostrarSubmenu += String.format("Nome: %s \nNúmero: %s \nPlano: %d \nCrédito : %d \n \n",
-                        array.get(i).getNome(), array.get(i).getNumero(), array.get(i).getPlano(), array.get(i).getCredito());
-            }
-             
+        mostrarSubmenu = "";
+        for (int i = 0; i < array.size(); i++) { // mostrar tudo
+            mostrarSubmenu += String.format("Nome: %s \nNúmero: %s \nPlano: %d \nCrédito : %d \n \n",
+                    array.get(i).getNome(), array.get(i).getNumero(), array.get(i).getPlano(), array.get(i).getCredito());
+        }
         return mostrarSubmenu; 
     }
     
@@ -297,20 +294,20 @@ public class Main {
         int valor = 0;
         String mostrarSubmenu = "";
         
-            mostrarSubmenu = "";
-            for (int i = 0; i < array.size(); i++) {
-                if(array.get(i).getPlano() == 1){
-                    if (array.get(i).getCredito() > valor){ //Achar o maior valor de crédito
-                        valor = array.get(i).getCredito();
-                        mostrarSubmenu = String.format("Nome: %s \nNúmero: %s \nPlano: %d \nCrédito : %d \n \n",
-                                    array.get(i).getNome(), array.get(i).getNumero(), array.get(i).getPlano(), array.get(i).getCredito());
-                    }
+        mostrarSubmenu = "";
+        for (int i = 0; i < array.size(); i++) {
+            if(array.get(i).getPlano() == 1){
+                if (array.get(i).getCredito() > valor){ //Achar o maior valor de crédito
+                    valor = array.get(i).getCredito();
+                    mostrarSubmenu = String.format("Nome: %s \nNúmero: %s \nPlano: %d \nCrédito : %d \n \n",
+                                array.get(i).getNome(), array.get(i).getNumero(), array.get(i).getPlano(), array.get(i).getCredito());
                 }
             }
-            if(mostrarSubmenu.equals("")){
-                mostrarSubmenu = "Sem clientes";
-            }
-            return mostrarSubmenu;
+        }
+        if(mostrarSubmenu.equals("")){
+            mostrarSubmenu = "Sem clientes";
+        }
+        return mostrarSubmenu;
     }
     
     public static String despesas(ArrayList<Ligacao> arrayRelatorio, ArrayList<Cliente> arrayCliente) throws IOException{
